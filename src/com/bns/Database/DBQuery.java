@@ -1,0 +1,1 @@
+package com.bns.Database;import android.database.sqlite.*;public interface DBQuery {	public SQLiteDatabase DBCreate();	public void TableCreate(SQLiteDatabase db);	public void Insert(SQLiteDatabase db,Object obj);	public void DeleteObject(SQLiteDatabase db,Object obj);	public void DeleteAll(SQLiteDatabase db);	public void Update(SQLiteDatabase db,Object newObj);}
