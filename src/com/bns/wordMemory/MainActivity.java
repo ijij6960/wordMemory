@@ -17,22 +17,22 @@ import com.bns.Database.*;
 
 public class MainActivity extends ActionBarActivity {
 	static int nextClickCount = 0;
-	SQLiteDatabase _dbW = null;
-	SQLiteDatabase _dbD = null;
-	DBQueryWord dbqw = null;
-	DBQueryDate dbqd = null;
-	ListView listView = null;
-	MACustomAdapter ma_adapter = null;
-	String randomAnswer = null;
-	List<String> answerList = null;
-    List<String> wordList = null;
-    List<String> meanList = null;
-    String problemString = null;
-    DBQueryWord.PROBLEMTYPE type = null;
+	private SQLiteDatabase _dbW = null;
+	private SQLiteDatabase _dbD = null;
+	private DBQueryWord dbqw = null;
+	private DBQueryDate dbqd = null;
+	private ListView listView = null;
+	private MACustomAdapter ma_adapter = null;
+	private String randomAnswer = null;
+	private List<String> answerList = null;
+    private List<String> wordList = null;
+    private List<String> meanList = null;
+    private String problemString = null;
+    private DBQueryWord.PROBLEMTYPE type = null;
     
 	/* layout */
-	TextView textView = null;
-	Button button = null;
+	private TextView textView = null;
+	private Button button = null;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,16 +190,16 @@ public class MainActivity extends ActionBarActivity {
     	{
     		// add MissTable OK
     		Log.d("Check","OK");
+    		DateDB dateDB = new DateDB(result);
     	}
     	else
     	{
     		// add MissTable Miss
     		Log.d("Check", "Miss");
     	}
-    	
+    	this.updateList();
     	if(nextClickCount == 9)
     	{
-    		updateList();
     		button.setText("Result");
     	}
     	else if(nextClickCount == 10)
@@ -218,19 +218,20 @@ public class MainActivity extends ActionBarActivity {
         
         	listView.setAdapter(ma_adapter);
         	if(answerList != null && answerList.size() != 0) randomAnswer = answerList.get((int)(Math.random() * 5));
-        
+
         	problemString = dbqw.getData(this._dbW, randomAnswer, DBQueryWord.PROBLEMTYPE.MEAN);
         	textView.setText(problemString);
     	}
-    	else if( type == DBQueryWord.PROBLEMTYPE.WORD)
+    	else if(type == DBQueryWord.PROBLEMTYPE.WORD)
     	{
-        	answerList = this.setAnswer(wordList, wordList.size());
+        	answerList = this.setAnswer(meanList, meanList.size());
             ma_adapter = new MACustomAdapter(this,0,answerList);
             
             listView.setAdapter(ma_adapter);
             if(answerList != null && answerList.size() != 0) randomAnswer = answerList.get((int)(Math.random() * 5));
-            
+            /* not display */
             problemString = dbqw.getData(this._dbW, randomAnswer, DBQueryWord.PROBLEMTYPE.WORD);
+            Log.d("problemString is null","" + problemString);
             textView.setText(problemString);
     	}
     }
