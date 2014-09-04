@@ -3,9 +3,10 @@ package com.bns.wordMemory;
 import java.text.*;
 import java.util.*;
 
+import android.app.*;
+import android.content.*;
 import android.database.sqlite.*;
 import android.os.*;
-import android.support.v7.app.*;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
@@ -15,7 +16,7 @@ import com.bns.DataClass.*;
 import com.bns.Database.*;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 	static int nextClickCount = 0;
 	private SQLiteDatabase _dbW = null;
 	private SQLiteDatabase _dbD = null;
@@ -29,7 +30,9 @@ public class MainActivity extends ActionBarActivity {
     private List<String> meanList = null;
     private String problemString = null;
     private DBQueryWord.PROBLEMTYPE type = null;
-    
+    private final String Match = "T";
+    private final String MissMatch = "F";
+    private String date;
 	/* layout */
 	private TextView textView = null;
 	private Button button = null;
@@ -111,7 +114,7 @@ public class MainActivity extends ActionBarActivity {
     
     private void db_init()
     {
-    	String date = this.setDate();
+    	date = "D" + this.setDate();
     	dbqw = new DBQueryWord("word","word.db",this);
     	dbqd = new DBQueryDate(date,date + ".db",this);
     	this._dbW = dbqw.DBCreate();
@@ -185,19 +188,45 @@ public class MainActivity extends ActionBarActivity {
     	}
     	
     	String resultString = dbqw.getData(this._dbW, selected, this.type);
+    	String vsString = textView.getText().toString();
     	
-    	if(resultString != null)
+    	if(resultString != null && resultString.equals(vsString))
     	{
-    		// add MissTable OK
+    		DateDB date = null;
+    		if(this.type == DBQueryWord.PROBLEMTYPE.WORD)
+    		{
+    			/* vsString = word resultString = mean */
+    			date = new DateDB(vsString,resultString,0,this.Match);
+    			dbqd.Insert(_dbD, date);
+    		}
+    		else if(this.type == DBQueryWord.PROBLEMTYPE.MEAN)
+    		{
+    			/* vsString = mean resultString = word */
+    			date = new DateDB(resultString,vsString,0,this.Match);
+    			dbqd.Insert(_dbD, date);
+    		}
+    		
     		Log.d("Check","OK");
-    		DateDB dateDB = new DateDB(result);
     	}
     	else
     	{
     		// add MissTable Miss
+    		DateDB date = null;
+    		if(this.type == DBQueryWord.PROBLEMTYPE.WORD)
+    		{
+    			/* vsString = word resultString = mean */
+    			date = new DateDB(vsString,resultString,0,this.MissMatch);
+    			dbqd.Insert(_dbD, date);
+    		}
+    		else if(this.type == DBQueryWord.PROBLEMTYPE.MEAN)
+    		{
+    			/* vsString = mean resultString = word */
+    			date = new DateDB(resultString,vsString,0,this.MissMatch);
+    			dbqd.Insert(_dbD, date);
+    		}
     		Log.d("Check", "Miss");
     	}
-    	this.updateList();
+    	this.updateList(); // update;
     	if(nextClickCount == 9)
     	{
     		button.setText("Result");
@@ -205,8 +234,12 @@ public class MainActivity extends ActionBarActivity {
     	else if(nextClickCount == 10)
     	{
     		nextClickCount = 0;
+    		Intent intent = new Intent(this,ResultActivity.class);
+    		intent.putExtra("TableName", date);
+    		this.startActivity(intent);
+    		this.finish();
+    		//page Move
     	}
-    	//page move and database update
     }
     
     private void updateList()
@@ -229,9 +262,8 @@ public class MainActivity extends ActionBarActivity {
             
             listView.setAdapter(ma_adapter);
             if(answerList != null && answerList.size() != 0) randomAnswer = answerList.get((int)(Math.random() * 5));
-            /* not display */
+
             problemString = dbqw.getData(this._dbW, randomAnswer, DBQueryWord.PROBLEMTYPE.WORD);
-            Log.d("problemString is null","" + problemString);
             textView.setText(problemString);
     	}
     }
