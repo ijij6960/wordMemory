@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">wordMemory_ver1.0.0</string>
-    <string name="problem">text_default</string>
-    <string name="action_settings">Settings</string>
-    <string name="next">Next</string>
-	<string name="text_default">default</string>
-</resources>
