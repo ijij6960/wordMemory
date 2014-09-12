@@ -1,0 +1,1 @@
+package com.bns.Common;import java.util.*;import android.app.*;public class Common {	static public Map<String,Activity> ViewList = new HashMap<String,Activity>();}
