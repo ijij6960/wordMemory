@@ -1,0 +1,24 @@
+{
+    "word": [
+      {
+        "spell": "apple",
+        "mean": "사과"
+      },
+      {
+        "spell": "air",
+        "mean": "공기"
+      },
+      {
+        "spell": "airplane",
+        "mean": "비행기"
+      },
+      {
+        "spell": "acid",
+        "mean": "산성"
+      },
+      {
+        "spell": "army",
+        "mean": "군대"
+      }
+    ]
+}
