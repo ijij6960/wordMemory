@@ -4,5 +4,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <color name="chapter_list_background">#DC143C</color>
-    
+    <color name="result_list_background">#4169e1</color>
 </resources>
