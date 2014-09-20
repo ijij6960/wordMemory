@@ -17,6 +17,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/problem"
+        android:clickable="true"
+        android:onClick="OnListen"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
